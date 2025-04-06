@@ -1,0 +1,36 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "Opencv4.10.0 compile task",
+            "command": "g++",
+            "args": [
+                "-g",
+                "-std=c++11",
+                "${file}",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "-I",
+                "/usr/local/include/opencv4",
+                "-L",
+                "/usr/local/lib",
+                "-lopencv_core",
+                "-lopencv_imgproc",
+                "-lopencv_highgui",
+                "-lopencv_imgcodecs",
+                "-lopencv_dnn"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build",
+            "presentation": {
+                "panel": "new"
+            }
+        }
+    ]
+}
