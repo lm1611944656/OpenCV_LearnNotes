@@ -24,8 +24,6 @@ public:
 
     void modelInfer(void);
 
-    void camel_elephant_infer(std::string model_path, std::string labels_file);
-
 private:
     /**读取图像 */
     cv::Mat readImg(const std::string &imgPath);

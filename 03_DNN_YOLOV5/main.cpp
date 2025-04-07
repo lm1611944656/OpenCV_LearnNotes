@@ -7,16 +7,14 @@ const std::string imgPath = "/home/lmz/workspace/opencv_workspace/OpenCV_LearnNo
 
 
 int main(int argc, char **argv){
-    std::cout << "Model Path: " << modelPath << std::endl;
-    std::cout << "Class Path: " << classPath << std::endl;
-    std::cout << "Image Path: " << imgPath << std::endl;
-    //ObjectDetection *obj = new ObjectDetection(modelPath, classPath, imgPath);
+
+    ObjectDetection *obj = new ObjectDetection(modelPath, classPath, imgPath);
     // std::cout << "对象构造完成！" << std::endl;
 
-    ObjectDetection obj(modelPath, classPath, imgPath);
+    //ObjectDetection obj(modelPath, classPath, imgPath);
     std::cout << "对象构造完成！" << std::endl;
 
-    obj.modelInfer();
+    obj->modelInfer();
 
     //obj.camel_elephant_infer(modelPath, classPath);
     waitKey(0);

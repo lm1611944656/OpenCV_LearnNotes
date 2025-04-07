@@ -1,3 +1,0 @@
-/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/03_DNN_YOLOV5/build/CMakeFiles/ImageShow.dir
-/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/03_DNN_YOLOV5/build/CMakeFiles/edit_cache.dir
-/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/03_DNN_YOLOV5/build/CMakeFiles/rebuild_cache.dir
