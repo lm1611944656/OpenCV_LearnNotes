@@ -4,7 +4,7 @@ include_directories(${PROJECT_SOURCE_DIR}/src/utils
 
 # 遍历当前文件下的所有源文件，放入FUNC2_SOURCE变量中
 aux_source_directory(${PROJECT_SOURCE_DIR}/src/func2 FUNC2_SOURCE)
-message("func2的源码: ${FUNC2_SOURCE}")
+message(STATUS "func2的源码: ${FUNC2_SOURCE}")
 
 
 # 指定动态库生成的位置
