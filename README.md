@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # OpenCV_LearnNotes
 
 | 索引 |                             目录                             | 功能描述                                                     |
@@ -22,6 +21,3 @@
 |  17  | [14_Factory AndSingleton](https://github.com/lm1611944656/OpenCV_LearnNotes/tree/master/14_Factory AndSingleton) | <strong><font color="blue">单例模式(模版类封装)，工厂模式(未使用模版类封装)</font></strong> |
 |  18  | [14_FactoryAndSingleton_V2](https://github.com/lm1611944656/OpenCV_LearnNotes/tree/master/14_FactoryAndSingleton_V2) | <strong><font color="blue">单例模式(模版类封装)，工厂模式(未使用模版类封装)</font></strong>；<strong><font color="green">工厂模式使用了宏定义</font></strong> |
 |  19  | [14_FactoryAndSingleton_V3](https://github.com/lm1611944656/OpenCV_LearnNotes/tree/master/14_FactoryAndSingleton_V3) | <strong><font color="blue">单例模式(模版类封装)，工厂模式(模版类封装)</font></strong>；<strong><font color="green">工厂模式使用了宏定义</font></strong> |
-
-=======
->>>>>>> 7d2e40103fede1dd91383cfe019918d6c15e5957
