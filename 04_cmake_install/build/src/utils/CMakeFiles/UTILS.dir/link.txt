@@ -1,0 +1,2 @@
+/usr/bin/ar qc /home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/04_cmake_install/library/libUTILS.a CMakeFiles/UTILS.dir/utils.cpp.o
+/usr/bin/ranlib /home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/04_cmake_install/library/libUTILS.a

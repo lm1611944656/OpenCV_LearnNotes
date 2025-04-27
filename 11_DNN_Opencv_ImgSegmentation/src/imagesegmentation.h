@@ -62,8 +62,8 @@ private:
 
     /**数据预处理 */
     void imageBorderPadding(
-        const cv::Mat& srcImg,          // 原始图像
-        cv::Mat& dstImg,                // 变化后的图像   
+        const cv::Mat& srcImg,          // 输入参数：原始图像
+        cv::Mat& dstImg,                // 输出参数：变化后的图像   
         cv::Vec4d& params,              // 输出参数：[ratio_x, ratio_y, dw, dh]
         const cv::Size& newShape = cv::Size(640, 640),
         bool autoShape = false,         // 自动填充

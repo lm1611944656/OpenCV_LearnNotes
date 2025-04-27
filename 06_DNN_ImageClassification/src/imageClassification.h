@@ -33,6 +33,9 @@ public:
     void postprocess(cv::Mat &tensor);
 
 private:
+    void getNetModelInfo(cv::dnn::Net &netModel);
+
+private:
     /** 模型和标签文件 */
     std::string m_modelFile;
     std::string m_classFile;

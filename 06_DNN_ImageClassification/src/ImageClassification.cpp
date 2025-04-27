@@ -83,6 +83,9 @@ cv::Mat ImageClassification::preprocess(cv::Mat &srcImg){
         throw std::invalid_argument("输入的Mat对象为空! ");
     }
 
+    std::cout << "输入图像的维度: " <<  srcImg.dims << std::endl;
+    std::cout << "输入图像的形状: " <<  srcImg.size << std::endl;
+
     cv::Mat tensor4D;
 
     /**原始图像需要乘于的缩放因子 */
@@ -95,12 +98,18 @@ cv::Mat ImageClassification::preprocess(cv::Mat &srcImg){
     bool swapRB = true; // 如果模型需要 BGR -> RGB 转换
     cv::dnn::blobFromImage(srcImg, tensor4D, scalefactor, cv::Size(width, height), mean, swapRB, false);
     
+    /**输入tensor的形状 */
+    std::cout << "输入tensor的维度: " <<  tensor4D.dims << std::endl;
+    std::cout << "输入tensor的形状: " <<  tensor4D.size << std::endl;// 1 x 3 x 224 x 224
+
+
     // 打印 tensor4D 的形状
     std::cout << "Blob shape: [" 
-    << tensor4D.size[0] << ", " 
-    << tensor4D.size[1] << ", " 
-    << tensor4D.size[2] << ", " 
-    << tensor4D.size[3] << "]" << std::endl;
+    << tensor4D.size[0] << ", "     // 获取第0维度的数据
+    << tensor4D.size[1] << ", "     // 获取第1维度的数据
+    << tensor4D.size[2] << ", "     // 获取第2维度的数据
+    << tensor4D.size[3] << "]"      // 获取第3维度的数据
+    << std::endl;
 
     return tensor4D;
 }
@@ -116,6 +125,9 @@ cv::Mat ImageClassification::modelInference(cv::Mat &tensor4D, bool isUsedCUDA){
         throw std::runtime_error("无法加载模型文件: " + m_modelFile);
     }
 
+    /**读取模型的相关信息 */
+    getNetModelInfo(model);
+
     /** 判断是是GPU和CPU */
     if (isUsedCUDA) {
         model.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
@@ -130,6 +142,11 @@ cv::Mat ImageClassification::modelInference(cv::Mat &tensor4D, bool isUsedCUDA){
 
     /**模型的前向传播 */
     cv::Mat outputTensor = model.forward();
+
+    /**输出tensor的形状 */
+    std::cout << "模型输出tensor的维度: " <<  outputTensor.dims << std::endl;
+    std::cout << "模型输出tensor的形状: " <<  outputTensor.size << std::endl;
+    
     return outputTensor;
 }
 
@@ -186,6 +203,11 @@ void ImageClassification::postprocess(cv::Mat &tensor){
     } else {
         probabilities = tensor.reshape(1, 1);
     }
+
+    /**输出tensor的形状 */
+    std::cout << "probabilities的维度: " <<  probabilities.dims << std::endl;
+    std::cout << "probabilities的形状: " <<  probabilities.size << std::endl;
+
     
     /**打印所有类别的概率 */
     std::cout << "\nAll class probabilities:" << std::endl;
@@ -196,9 +218,18 @@ void ImageClassification::postprocess(cv::Mat &tensor){
     /**获取最大置信度的类别索引 */
     cv::Point classIdPoint;
     double confidence;
-    minMaxLoc(probabilities, nullptr, &confidence, nullptr, &classIdPoint);
+    cv::minMaxLoc(probabilities, nullptr, &confidence, nullptr, &classIdPoint);
 
     /**输出预测结果  */
     int classId = classIdPoint.x;
     std::cout << "Predicted class: " << classLabel[classId] << ", Confidence: " << confidence << std::endl;
+}
+
+void ImageClassification::getNetModelInfo(cv::dnn::Net &netModel){
+    /**获取网络模型所有层的名称 */
+    std::vector<std::string> modelLayerName = netModel.getLayerNames();
+    for(int i = 0; i < modelLayerName.size(); i++){
+        std::cout << "第" << i << "层" << ": " << modelLayerName[i] << std::endl;
+    }
+    // https://blog.csdn.net/qq_35054151/article/details/112487691
 }

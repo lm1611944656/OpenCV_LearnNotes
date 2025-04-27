@@ -19,6 +19,11 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/dnn.hpp>
 
+typedef enum {
+    CPU,
+    GPU
+}TDeviceType;
+
 class CObjeectDetect{
 public:
     explicit CObjeectDetect(const std::string &modelPath, const std::string &labelPath);
@@ -96,7 +101,7 @@ private:
     cv::Mat pre_process(cv::Mat &srcImg);
 
     /**模型推理 */
-    std::vector<cv::Mat> modelInference(cv::Mat &tensor4D, bool isUseCUDA = false);
+    std::vector<cv::Mat> modelInference(cv::Mat &tensor4D, TDeviceType deviceType);
 
     /**后处理 */
     std::vector<cv::Rect> post_process(std::vector<cv::Mat> &modelOutResult, cv::Mat &srcImg);

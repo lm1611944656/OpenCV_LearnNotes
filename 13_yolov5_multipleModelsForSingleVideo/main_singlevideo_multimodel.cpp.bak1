@@ -1,0 +1,176 @@
+#include <iostream>
+#include <string>
+#include <queue>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <future>
+
+
+#include "yolov5.h"
+
+
+struct Job
+{
+	cv::Mat image;
+	std::shared_ptr<std::promise<std::vector<cv::Rect>>> boxes;
+};
+
+std::queue<Job> jobs1,jobs2;
+
+std::mutex lock1, lock2;
+
+std::condition_variable cv1, cv2;
+
+const int limit = 10;
+
+bool stop = false;
+
+void print_time(int camera_id)
+{
+	auto now = std::chrono::system_clock::now();
+	uint64_t dis_millseconds = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count()
+		- std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count() * 1000;
+	time_t tt = std::chrono::system_clock::to_time_t(now);
+	auto time_tm = localtime(&tt);
+	char time[100] = { 0 };
+	sprintf(time, "%d-%02d-%02d %02d:%02d:%02d %03d", time_tm->tm_year + 1900,
+		time_tm->tm_mon + 1, time_tm->tm_mday, time_tm->tm_hour,
+		time_tm->tm_min, time_tm->tm_sec, (int)dis_millseconds);
+	std::cout << "infer" << std::to_string(camera_id) << " 当前时间为：" << time << std::endl;
+}
+
+void capture(cv::VideoCapture cap)
+{
+	while (cv::waitKey(1) < 0)
+	{
+		Job job1, job2;
+		cv::Mat frame;
+
+		cap.read(frame);
+		if (frame.empty())
+		{
+			stop = true;
+			break;
+		}
+
+		{
+			std::unique_lock<std::mutex> l1(lock1);
+			cv1.wait(l1, [&]() { return jobs1.size()<limit; });
+
+			job1.image = frame;
+			//job1.boxes.reset(new std::promise<std::vector<cv::Rect>>());
+			
+			job1.boxes = std::make_shared<std::promise<std::vector<cv::Rect>>>();
+			
+			/**入队 */
+			jobs1.push(job1);
+		}
+
+		{
+			std::unique_lock<std::mutex> l2(lock2);
+			cv1.wait(l2, [&]() { return  jobs2.size() < limit; });
+
+			job2.image = frame;
+			job2.boxes.reset(new std::promise<std::vector<cv::Rect>>());
+			jobs2.push(job2);
+		}
+
+		std::vector<cv::Rect> boxes1 = job1.boxes->get_future().get();
+		std::vector<cv::Rect> boxes2 = job2.boxes->get_future().get();
+
+		cv::Mat result1 = frame.clone(), result2 = frame.clone();
+		for (size_t i = 0; i < boxes1.size(); i++)
+		{
+			cv::rectangle(result1, boxes1[i], cv::Scalar(255, 0, 0), 2);
+		}
+		for (size_t i = 0; i < boxes2.size(); i++)
+		{
+			cv::rectangle(result2, boxes2[i], cv::Scalar(255, 0, 0), 2);
+		}
+
+		cv::imshow("result1", result1);
+		cv::imshow("result2", result2);
+	}
+}
+
+void infer1(cv::dnn::Net net)
+{ 
+	while (true)
+	{
+		if (stop)
+			break; //�����߳��޷��˳�
+
+		if (!jobs1.empty())
+		{
+			std::lock_guard<std::mutex> l1(lock1);
+			auto job = jobs1.front();
+			jobs1.pop();
+			cv1.notify_all();
+
+			cv::Mat input_image = job.image, blob;
+			pre_process(input_image, blob);
+
+			std::vector<cv::Mat> network_outputs;
+			process(blob, net, network_outputs);
+
+			std::vector<cv::Rect> boxes;
+			post_process(input_image, boxes, network_outputs);
+
+			job.boxes->set_value(boxes);
+			print_time(1);
+		}
+		std::this_thread::yield(); //�����߳��޷��˳�
+	}
+}
+
+void infer2(cv::dnn::Net net)
+{
+	while (true)
+	{
+		if (stop)
+			break;
+
+		if (!jobs2.empty())
+		{
+			std::lock_guard<std::mutex> l2(lock2);
+			auto job = jobs2.front();
+			jobs2.pop();
+			cv2.notify_all();
+
+			#define LETTERBOX
+			
+			cv::Mat input_image = job.image, blob, output_image;
+			pre_process(input_image, blob);
+
+			std::vector<cv::Mat> network_outputs;
+			process(blob, net, network_outputs);
+
+			std::vector<cv::Rect> boxes;
+			post_process(input_image, boxes, network_outputs);
+
+			job.boxes->set_value(boxes);
+			print_time(2);
+		}
+		std::this_thread::yield();
+	}
+}
+
+
+int main(int argc, char* argv[])
+{
+	cv::VideoCapture cap("test2.mp4");
+
+	cv::dnn::Net net1 = cv::dnn::readNet("yolov5n.onnx");
+	cv::dnn::Net net2 = cv::dnn::readNet("yolov5s.onnx");
+
+	std::thread t0(capture, cap);
+	std::thread t1(infer1, net1);
+	std::thread t2(infer2, net2);
+
+	t0.join();
+	t1.join();
+	t2.join();
+
+	return 0;
+}
