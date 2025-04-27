@@ -54,7 +54,7 @@ void CObjeectDetect::imageInference(const std::string &imgPath)
     //getMatInf(tensor4D);
 
     /**模型推理 */
-    std::vector<cv::Mat> outTensor =  modelInference(tensor4D);
+    std::vector<cv::Mat> outTensor =  modelInference(tensor4D, CPU);
 
     /**后处理 */
     std::vector<cv::Rect> detections = post_process(outTensor, srcImg);
@@ -84,7 +84,7 @@ void CObjeectDetect::videoInference(const std::string &videoPath)
         cv::Mat tensor4D = pre_process(srcImg);
 
         /**模型推理 */
-        std::vector<cv::Mat> outTensor =  modelInference(tensor4D);
+        std::vector<cv::Mat> outTensor =  modelInference(tensor4D, CPU);
 
         /**后处理 */
         std::vector<cv::Rect> detections = post_process(outTensor, srcImg);
@@ -127,7 +127,7 @@ void CObjeectDetect::vehicleCounting(const std::string &videoPath){
         
         cv::Mat tensor4D = pre_process(srcImg);
        
-        std::vector<cv::Mat> outTensor =  modelInference(tensor4D);
+        std::vector<cv::Mat> outTensor =  modelInference(tensor4D, CPU);
 
         std::vector<cv::Rect> detections = post_process(outTensor, srcImg, "car");
 
@@ -274,7 +274,7 @@ cv::Mat CObjeectDetect::pre_process(cv::Mat &srcImg){
     return tensor4D;
 }
 
-std::vector<cv::Mat> CObjeectDetect::modelInference(cv::Mat &tensor4D, bool isUseCUDA){
+std::vector<cv::Mat> CObjeectDetect::modelInference(cv::Mat &tensor4D, TDeviceType deviceType){
     if(tensor4D.empty()){
         throw std::invalid_argument("传递参数错误!");
     }
@@ -292,10 +292,10 @@ std::vector<cv::Mat> CObjeectDetect::modelInference(cv::Mat &tensor4D, bool isUs
     // getModelInf(model);
 
     /** 判断是是GPU和CPU */
-    if (isUseCUDA) {
+    if (deviceType == GPU) {
         model.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
         model.setPreferableTarget(cv::dnn::DNN_TARGET_CUDA);
-    } else {
+    } else if(deviceType == CPU){
         model.setPreferableBackend(cv::dnn::DNN_BACKEND_OPENCV);
         model.setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
     }

@@ -149,6 +149,7 @@ void YoloV5CPP::modelInferenceOfVideo(const std::string &videoPath){
 		printf("could not open file...\n");
 		exit(-1);
 	}
+	
 	std::string name;
 	while (!fp.eof())
 	{

@@ -1,0 +1,1 @@
+/usr/bin/g++ -fPIC -shared -Wl,-soname,libSRC_LIB.so -o ../libarys/libSRC_LIB.so CMakeFiles/SRC_LIB.dir/networkInterfaceDetect.cpp.o

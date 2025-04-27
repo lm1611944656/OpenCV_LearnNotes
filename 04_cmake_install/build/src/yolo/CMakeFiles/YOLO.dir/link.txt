@@ -1,0 +1,1 @@
+/usr/bin/g++ -fPIC -shared -Wl,-soname,libYOLO.so -o /home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/04_cmake_install/library/libYOLO.so CMakeFiles/YOLO.dir/yolo.cpp.o
