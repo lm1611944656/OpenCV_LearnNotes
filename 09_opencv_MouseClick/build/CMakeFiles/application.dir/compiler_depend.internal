@@ -3,6 +3,7 @@
 
 CMakeFiles/application.dir/main.cpp.o
  /home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/main.cpp
+ /home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/src/ImageCoordinates.h
  /usr/include/alloca.h
  /usr/include/asm-generic/errno-base.h
  /usr/include/asm-generic/errno.h

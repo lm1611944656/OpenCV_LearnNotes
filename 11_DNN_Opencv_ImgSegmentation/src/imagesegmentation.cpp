@@ -244,7 +244,14 @@ cv::Mat ImgSegmentation::pre_process(cv::Mat &srcImg, cv::Vec4d &paddingParam){
     cv::Mat tensor4D;   // [batch, channel, W, H]
     cv::Mat paddingImg;
     imageBorderPadding(srcImg, paddingImg, paddingParam, cv::Size(ImgSegmentation::INPUT_IMG_WIDTH, ImgSegmentation::INPUT_IMG_HEIGHT));       
-    cv::dnn::blobFromImage(paddingImg, tensor4D, 1. / 255., cv::Size(ImgSegmentation::INPUT_IMG_WIDTH, ImgSegmentation::INPUT_IMG_HEIGHT), cv::Scalar(), true, false); 
+    
+    /**模型需要的参数 */
+    float scale = 1.0 / 255.;                           // 将像素值缩放到[0,1]
+    cv::Size inputSize = cv::Size(ImgSegmentation::INPUT_IMG_WIDTH, ImgSegmentation::INPUT_IMG_HEIGHT);            // 假设模型期望的输入大小为224x224
+    cv::Scalar mean = cv::Scalar(0.485, 0.456, 0.406);  // 减去的均值（对于ResNet等模型）
+    bool swapRB = true;                                 // 若模型使用RGB格式，则需交换R和B通道
+
+    cv::dnn::blobFromImage(paddingImg, tensor4D, scale, inputSize, cv::Scalar(), swapRB, false); 
     return tensor4D;
 }
 

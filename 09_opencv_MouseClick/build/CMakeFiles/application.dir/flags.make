@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/g++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -isystem /usr/local/include/opencv4
+CXX_INCLUDES = -I/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/src -isystem /usr/local/include/opencv4
 
 CXX_FLAGS = 
 

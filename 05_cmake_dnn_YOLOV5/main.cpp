@@ -11,10 +11,10 @@ int main(int argc, char **argv){
     YoloV5CPP yoloObj(modelFile, classFile);
 
     /** 图像检测 */
-    yoloObj.modelInferenceOfImg(imgPath);
+    //yoloObj.modelInferenceOfImg(imgPath);
 
     /** 视频检测 */
-    //yoloObj.modelInferenceOfVideo(videoPath);
+    yoloObj.modelInferenceOfVideo(videoPath);
 
     cv::waitKey(0);
 	cv::destroyAllWindows();

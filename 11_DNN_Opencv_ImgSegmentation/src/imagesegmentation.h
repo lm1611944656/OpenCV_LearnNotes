@@ -83,7 +83,13 @@ private:
         TOutputSeg& output,                 // 语义分割到的类别信息
         const TMaskParams& maskParams);     // 掩膜相关参数，帮助函数正确地把轮廓映射回原始图像
 
-    /**后处理：解析网络输出，生成最终结果 */
+    /**
+     * @brief 后处理：解析网络输出，生成最终结果;
+     * @param image         输入参数，原始图像；
+     * @param outputs       输入参数，模型输出结果[1, 25200, 117]
+     * @param class_name    输入参数，检测类别名称
+     * @param params        输入参数，
+     */
     cv::Mat post_process(cv::Mat& image, std::vector<cv::Mat>& outputs, const std::vector<std::string>& class_name, cv::Vec4d& params);
 
     /**在原始图像上绘制检测框和掩膜 */

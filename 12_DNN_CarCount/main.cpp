@@ -10,13 +10,13 @@ int main(int argc, char **argv){
     CObjeectDetect *m_carDetect = new CObjeectDetect(modelPath, classPath);
 
     /**图像检测 */
-    //m_carDetect->imageInference(imgPath);
+    m_carDetect->imageInference(imgPath);
 
     /**视频检测 */
-    // m_carDetect->videoInference(videoPath);
+    //m_carDetect->videoInference(videoPath);
 
     /**车辆的数量计数 */
-    m_carDetect->vehicleCounting(videoPath);
+    //m_carDetect->vehicleCounting(videoPath);
 
     cv::waitKey(0);
     cv::destroyAllWindows();

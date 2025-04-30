@@ -1,0 +1,1 @@
+/usr/bin/g++ -fPIC -shared -Wl,-soname,libSRC_LIB.so -o /home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/libarys/libSRC_LIB.so CMakeFiles/SRC_LIB.dir/ImageCoordinates.cpp.o

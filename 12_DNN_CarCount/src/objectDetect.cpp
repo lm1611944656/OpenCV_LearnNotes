@@ -341,7 +341,7 @@ std::vector<cv::Rect> CObjeectDetect::post_process(std::vector<cv::Mat> &modelOu
     /**获取第1维度和第2维度的数据 */
     cv::Mat tensor2D(modelOutResult[0].size[1], modelOutResult[0].size[2], CV_32F, modelOutResult[0].ptr<float>());
 
-    //getMatInf(tensor2D);
+    getMatInf(tensor2D);
 
     /**指针偏移量(获取类别概率的位置) */
     int offsetVal = 5;
@@ -486,7 +486,8 @@ std::vector<cv::Rect> CObjeectDetect::post_process(std::vector<cv::Mat> &modelOu
     /**获取第1维度和第2维度的数据 */
     cv::Mat tensor2D(modelOutResult[0].size[1], modelOutResult[0].size[2], CV_32F, modelOutResult[0].ptr<float>());
 
-    //getMatInf(tensor2D);
+    getMatInf(tensor2D);
+    std::cout << __FILE__ << "  " << __LINE__ << std::endl;
 
     /**指针偏移量(获取类别概率的位置) */
     int offsetVal = 5;
@@ -638,6 +639,13 @@ void CObjeectDetect::getMatInf(cv::Mat &_mat){
 
     std::cout << "Mat的维度: " << _mat.dims << std::endl;
     std::cout << "Mat的size: " << _mat.size << std::endl;
+
+    /**判断Mat的内存是否是连续的 */
+    if (_mat.isContinuous()){
+        std::cout << "Mat在内存中是连续的内存对象!" << std::endl;
+    } else {
+        std::cout << "Mat在内存中是不连续的内存对象!" << std::endl;
+    }
 }
 
 void CObjeectDetect::getModelInf(cv::dnn::Net &model){

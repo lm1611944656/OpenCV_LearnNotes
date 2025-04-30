@@ -129,6 +129,19 @@ application/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/application.dir/build.make CMakeFiles/application.dir/build
 .PHONY : application/fast
 
+#=============================================================================
+# Target rules for targets named SRC_LIB
+
+# Build rule for target.
+SRC_LIB: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 SRC_LIB
+.PHONY : SRC_LIB
+
+# fast build rule for target.
+SRC_LIB/fast:
+	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/SRC_LIB.dir/build.make src/CMakeFiles/SRC_LIB.dir/build
+.PHONY : SRC_LIB/fast
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -161,6 +174,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... SRC_LIB"
 	@echo "... application"
 	@echo "... main.o"
 	@echo "... main.i"

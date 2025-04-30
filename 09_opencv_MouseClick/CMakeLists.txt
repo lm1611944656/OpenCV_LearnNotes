@@ -24,7 +24,7 @@ message(STATUS "C++ Compiler: ${CMAKE_CXX_COMPILER}")
 
 # *****************************************************************
 
-# 查找配置文件, 这个配置文件是必须的(没它不行)
+# 查找配置文件(OpenCVConfig.cmake 配置文件)
 find_package(OpenCV REQUIRED)
 message(STATUS "Found OpenCV version: ${OpenCV_VERSION}")
 message(STATUS "OpenCV libraries to link: ${OpenCV_LIBS}")
@@ -32,7 +32,7 @@ message(STATUS "OpenCV include directories: ${OpenCV_INCLUDE_DIRS}")
 
 # *****************************************************************
 # 到子目录下执行CMakeLists.txt文件
-#add_subdirectory(${PROJECT_SOURCE_DIR}/src)
+add_subdirectory(${PROJECT_SOURCE_DIR}/src)
 
 # message("src中的变量为：${NEW_SRC_LIST}")
 
@@ -45,9 +45,21 @@ message(STATUS "OpenCV include directories: ${OpenCV_INCLUDE_DIRS}")
 # 增加可执行文件
 add_executable(application main.cpp)
 
+# 为目标添加头文件
+target_include_directories(application PUBLIC
+    ${OpenCV_INCLUDE_DIRS}
+    ${PROJECT_SOURCE_DIR}/src
+)
+
 message(STATUS "OpenCV 库：${OpenCV_LIBS}")
+
+# 目标链接目录
+target_link_directories(application PUBLIC
+    ${PROJECT_SOURCE_DIR}/libarys
+)
 
 # 可执行文件链接动态库
 target_link_libraries(application
     ${OpenCV_LIBS}
+    SRC_LIB
 )

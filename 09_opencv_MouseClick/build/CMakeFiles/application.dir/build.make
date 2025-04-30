@@ -103,6 +103,7 @@ application: /usr/local/lib/libopencv_photo.so.4.10.0
 application: /usr/local/lib/libopencv_stitching.so.4.10.0
 application: /usr/local/lib/libopencv_video.so.4.10.0
 application: /usr/local/lib/libopencv_videoio.so.4.10.0
+application: /home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/libarys/libSRC_LIB.so
 application: /usr/local/lib/libopencv_imgcodecs.so.4.10.0
 application: /usr/local/lib/libopencv_dnn.so.4.10.0
 application: /usr/local/lib/libopencv_calib3d.so.4.10.0

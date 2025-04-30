@@ -64,33 +64,55 @@ CMAKE_BINARY_DIR = /home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_ope
 
 # The main recursive "all" target.
 all: CMakeFiles/application.dir/all
+all: src/all
 .PHONY : all
 
 # The main recursive "codegen" target.
 codegen: CMakeFiles/application.dir/codegen
+codegen: src/codegen
 .PHONY : codegen
 
 # The main recursive "preinstall" target.
-preinstall:
+preinstall: src/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
 clean: CMakeFiles/application.dir/clean
+clean: src/clean
 .PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory src
+
+# Recursive "all" directory target.
+src/all: src/CMakeFiles/SRC_LIB.dir/all
+.PHONY : src/all
+
+# Recursive "codegen" directory target.
+src/codegen: src/CMakeFiles/SRC_LIB.dir/codegen
+.PHONY : src/codegen
+
+# Recursive "preinstall" directory target.
+src/preinstall:
+.PHONY : src/preinstall
+
+# Recursive "clean" directory target.
+src/clean: src/CMakeFiles/SRC_LIB.dir/clean
+.PHONY : src/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/application.dir
 
 # All Build rule for target.
-CMakeFiles/application.dir/all:
+CMakeFiles/application.dir/all: src/CMakeFiles/SRC_LIB.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/application.dir/build.make CMakeFiles/application.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/application.dir/build.make CMakeFiles/application.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/build/CMakeFiles --progress-num=1,2 "Built target application"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/build/CMakeFiles --progress-num=3,4 "Built target application"
 .PHONY : CMakeFiles/application.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/application.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/build/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/application.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/build/CMakeFiles 0
 .PHONY : CMakeFiles/application.dir/rule
@@ -102,13 +124,45 @@ application: CMakeFiles/application.dir/rule
 # codegen rule for target.
 CMakeFiles/application.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/application.dir/build.make CMakeFiles/application.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/build/CMakeFiles --progress-num=1,2 "Finished codegen for target application"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/build/CMakeFiles --progress-num=3,4 "Finished codegen for target application"
 .PHONY : CMakeFiles/application.dir/codegen
 
 # clean rule for target.
 CMakeFiles/application.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/application.dir/build.make CMakeFiles/application.dir/clean
 .PHONY : CMakeFiles/application.dir/clean
+
+#=============================================================================
+# Target rules for target src/CMakeFiles/SRC_LIB.dir
+
+# All Build rule for target.
+src/CMakeFiles/SRC_LIB.dir/all:
+	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/SRC_LIB.dir/build.make src/CMakeFiles/SRC_LIB.dir/depend
+	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/SRC_LIB.dir/build.make src/CMakeFiles/SRC_LIB.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/build/CMakeFiles --progress-num=1,2 "Built target SRC_LIB"
+.PHONY : src/CMakeFiles/SRC_LIB.dir/all
+
+# Build rule for subdir invocation for target.
+src/CMakeFiles/SRC_LIB.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/SRC_LIB.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/build/CMakeFiles 0
+.PHONY : src/CMakeFiles/SRC_LIB.dir/rule
+
+# Convenience name for target.
+SRC_LIB: src/CMakeFiles/SRC_LIB.dir/rule
+.PHONY : SRC_LIB
+
+# codegen rule for target.
+src/CMakeFiles/SRC_LIB.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/SRC_LIB.dir/build.make src/CMakeFiles/SRC_LIB.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/build/CMakeFiles --progress-num=1,2 "Finished codegen for target SRC_LIB"
+.PHONY : src/CMakeFiles/SRC_LIB.dir/codegen
+
+# clean rule for target.
+src/CMakeFiles/SRC_LIB.dir/clean:
+	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/SRC_LIB.dir/build.make src/CMakeFiles/SRC_LIB.dir/clean
+.PHONY : src/CMakeFiles/SRC_LIB.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

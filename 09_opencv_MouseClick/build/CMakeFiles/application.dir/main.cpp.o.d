@@ -331,4 +331,5 @@ CMakeFiles/application.dir/main.cpp.o: \
  /usr/local/include/opencv4/opencv2/stitching/detail/camera.hpp \
  /usr/local/include/opencv4/opencv2/video.hpp \
  /usr/local/include/opencv4/opencv2/video/tracking.hpp \
- /usr/local/include/opencv4/opencv2/video/background_segm.hpp
+ /usr/local/include/opencv4/opencv2/video/background_segm.hpp \
+ /home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/09_opencv_MouseClick/src/ImageCoordinates.h
