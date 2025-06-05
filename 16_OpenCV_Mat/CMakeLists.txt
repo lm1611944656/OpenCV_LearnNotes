@@ -30,9 +30,10 @@ message(STATUS "C++ Compiler: ${CMAKE_CXX_COMPILER}")
 
 # 查找配置文件, 这个配置文件是必须的(没它不行)
 find_package(OpenCV REQUIRED)
-message(STATUS "Found OpenCV version: ${OpenCV_VERSION}")
-message(STATUS "OpenCV libraries to link: ${OpenCV_LIBS}")
-message(STATUS "OpenCV include directories: ${OpenCV_INCLUDE_DIRS}")
+message(STATUS "Found OpenCV version: ${OpenCV_VERSION}") # 打印OpenCV版本信息
+message(STATUS "OpenCV libraries to link: ${OpenCV_LIBS}") # 打印链接到的OpenCV库
+message(STATUS "OpenCV include directories: ${OpenCV_INCLUDE_DIRS}") # 打印OpenCV的包含目录
+message(STATUS "OpenCV CMake module directory: ${OpenCV_DIR}") # 打印OpenCV的CMake模块目录
 
 # 到子目录下执行CMakeLists.txt文件
 #add_subdirectory(${PROJECT_SOURCE_DIR}/src)

@@ -1,5 +1,0 @@
-/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/14_FactoryAndSingleton_V3/build/CMakeFiles/application.dir
-/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/14_FactoryAndSingleton_V3/build/CMakeFiles/edit_cache.dir
-/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/14_FactoryAndSingleton_V3/build/CMakeFiles/rebuild_cache.dir
-/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/14_FactoryAndSingleton_V3/build/src/CMakeFiles/edit_cache.dir
-/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/14_FactoryAndSingleton_V3/build/src/CMakeFiles/rebuild_cache.dir

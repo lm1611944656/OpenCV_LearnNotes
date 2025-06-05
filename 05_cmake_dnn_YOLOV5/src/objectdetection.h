@@ -22,5 +22,4 @@ private:
     const std::string labels_file;
 };
 
-
 #endif /**__OBJECTDETECTION_H__ */

@@ -1,3 +1,0 @@
-/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/16_OpenCV_Mat/build/CMakeFiles/application.dir
-/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/16_OpenCV_Mat/build/CMakeFiles/edit_cache.dir
-/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/16_OpenCV_Mat/build/CMakeFiles/rebuild_cache.dir

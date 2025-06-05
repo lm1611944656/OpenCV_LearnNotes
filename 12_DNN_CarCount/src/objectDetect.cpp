@@ -433,22 +433,20 @@ std::vector<cv::Rect> CObjeectDetect::post_process(std::vector<cv::Mat> &modelOu
 		cv::Rect box = m_boxes[idx];
 		m_boxes_NMS.push_back(box);
 
-
-
+        /**在检测到的目标类别上绘制矩形框 */
 		int left = box.x;
 		int top = box.y;
 		int width = box.width;
 		int height = box.height;
 		cv::rectangle(srcImg, cv::Point(left, top), cv::Point(left + width, top + height), color.at(COLOR_GREEN), LINEWIDTH);
 
-
+        /**获取类别概率 */
 		std::string label = cv::format("%.2f", m_confidences[idx]);
  
         /**获取类别名称 */
 		label = _className[m_classIDs[idx]] + ":" + label;
 
-        /**直接将标签固定 */
-		// label = "car";
+        /**在检测到的目标类别上绘制类别名称*/
 		drawLabel(srcImg, label, left, top);
 	}
     

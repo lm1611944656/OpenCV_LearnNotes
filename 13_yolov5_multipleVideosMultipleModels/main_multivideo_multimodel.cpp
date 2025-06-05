@@ -10,6 +10,8 @@
 #include "yolov5.h"
 
 
+#define LETTERBOX
+
 bool stop = false;
 
 void print_time(std::string video)

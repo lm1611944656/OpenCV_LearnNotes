@@ -1,0 +1,3 @@
+hat
+nohat
+reflective_clothes

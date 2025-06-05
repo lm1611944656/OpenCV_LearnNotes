@@ -1,4 +1,9 @@
 #include "yolov5.h"
+#include <mutex>
+#include <thread>
+
+// 定义一个互斥锁用于保护std::cout避免多个线程同时写入
+std::mutex print_mutex;
 
 
 void LetterBox(const cv::Mat& image, cv::Mat& outImage, cv::Vec4d& params, const cv::Size& newShape,
@@ -129,10 +134,12 @@ void post_process(cv::Mat& input_image, cv::Mat& output_image, std::vector<cv::M
 				float y = data[1];
 				float w = data[2];
 				float h = data[3];
+
 				int left = int(x - 0.5 * w);
 				int top = int(y - 0.5 * h);
 				int width = int(w);
 				int height = int(h);
+
 				cv::Rect box = cv::Rect(left, top, width, height);
 				scale_boxes(box, input_image.size());
 				boxes.push_back(box);
@@ -151,6 +158,13 @@ void post_process(cv::Mat& input_image, cv::Mat& output_image, std::vector<cv::M
 		cv::Rect box = boxes[idx];
 		std::string label = class_names[class_ids[idx]] + ":" + cv::format("%.2f", confidences[idx]);
 		draw_result(output_image, label, box);
+
+		// 打印每个线程的推理结果
+		std::lock_guard<std::mutex> lock(print_mutex);
+		std::cout << "Thread ID: " << std::this_thread::get_id() 
+					<< ", Detected Object - Class: " << label
+					<< ", Box: (" << box.x << ", " << box.y << ", " << box.width << ", " << box.height << ")"
+					<< std::endl;
 	}
 }
 

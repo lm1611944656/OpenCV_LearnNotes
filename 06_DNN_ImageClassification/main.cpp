@@ -2,9 +2,9 @@
 
 int main(int argc, char **argv) {
     /**文件路径 */
-    std::string imagePath = "data/DoorOpened_131.jpg";
-    std::string modelPath = "weight/best.onnx";
-    std::string classFilePath = "weight/classs.txt";
+    std::string imagePath = "data/DoorClosed_895.jpg";
+    std::string modelPath = "weight/yolov5_DoorStatus.onnx";
+    std::string classFilePath = "weight/classs_DoorStatus.txt";
 
     /**分类对象创建 */
     ImageClassification imgClass(modelPath, classFilePath);
