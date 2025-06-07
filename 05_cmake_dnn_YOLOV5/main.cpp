@@ -3,7 +3,7 @@
 
 const std::string modelFile = "weight/Yolov5_Hat_UnModify.onnx";
 const std::string classFile = "weight/classes_Hat.txt";
-const std::string imgPath = "data/Hat4.jpg";
+const std::string imgPath = "data/Hat5.jpg";
 const std::string videoPath = "/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/05_cmake_dnn_YOLOV5/soucce/sample.mp4";
 
 int main(int argc, char **argv){
