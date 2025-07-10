@@ -1,0 +1,6 @@
+hat
+Person
+reflective_clothes
+no_reflective_clothes
+nohat
+

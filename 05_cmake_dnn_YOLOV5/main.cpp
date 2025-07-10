@@ -1,10 +1,10 @@
 #include <iostream>
 #include "objectdetection.h"
 
-const std::string modelFile = "weight/Yolov5_Hat_UnModify.onnx";
-const std::string classFile = "weight/classes_Hat.txt";
-const std::string imgPath = "data/Hat5.jpg";
-const std::string videoPath = "/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/05_cmake_dnn_YOLOV5/soucce/sample.mp4";
+const std::string modelFile = "weight/yolov5s_coco80_20250608.onnx";
+const std::string classFile = "weight/yolov5s_coco80_20250608.txt";
+const std::string imgPath = "data/Hat3.jpg";
+const std::string videoPath = "soucce/sample.mp4";
 
 int main(int argc, char **argv){
     /** 创建检测对象 */

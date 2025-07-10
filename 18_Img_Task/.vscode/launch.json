@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "MyDebug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/home/lmz/workspace/opencv_workspace/OpenCV_LearnNotes/18_Img_Task/build/application",
+            // 注意：在Linux下不需要.exe后缀
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false, // 这个设置在某些Linux环境下可能不起作用，取决于终端模拟器的支持情况
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb", // 确保这是你Linux系统中gdb的正确路径
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true // 在某些情况下，允许忽略失败可能是更好的选择
+                }
+            ],
+            "preLaunchTask": "MyCompileTask"
+        }
+    ]
+}

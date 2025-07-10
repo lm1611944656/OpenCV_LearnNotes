@@ -1,0 +1,30 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "MyCompileTask",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",               
+                "-std=c++11",       
+                "${file}",          
+                "-o",               
+                "${fileDirname}/${fileBasenameNoExtension}",  
+                "@(pkg-config --cflags opencv4)",
+                "@(pkg-config --libs opencv4)"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "panel": "new"
+            }
+        }
+    ]
+}

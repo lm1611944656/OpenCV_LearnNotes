@@ -13,7 +13,7 @@ int main(int argc, char **argv){
     m_carDetect->imageInference(imgPath);
 
     /**视频检测 */
-    //m_carDetect->videoInference(videoPath);
+    m_carDetect->videoInference(videoPath);
 
     /**车辆的数量计数 */
     //m_carDetect->vehicleCounting(videoPath);
