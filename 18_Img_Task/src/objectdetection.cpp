@@ -104,7 +104,7 @@ cv::Mat CObjDetection::preprocess(void)
 
     /**tensor变化 */
     cv::Mat blob = cv::dnn::blobFromImage(image, 1 / 255.0, cv::Size(CObjDetection::INPUT_WIDTH, CObjDetection::INPUT_HEIGHT), cv::Scalar(0, 0, 0), true, false);
-    return blob;
+	return blob;
 }
 
 cv::Mat CObjDetection::modelInference(cv::Mat &tensor4D, TDeviceType deviceType)
