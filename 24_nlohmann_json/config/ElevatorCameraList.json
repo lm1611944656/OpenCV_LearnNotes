@@ -1,0 +1,60 @@
+{
+    "cameras": {
+        "Elevator-Camera1": {
+            "enable": true,
+            "ip": "10.10.182.31",
+            "username": "admin",
+            "password": "bydq123456",
+            "type": "FIXED_CAMERA"
+        },
+        "Elevator-Camera2": {
+            "enable": false,
+            "ip": "10.10.182.32",
+            "username": "admin",
+            "password": "bydq123456",
+            "type": "FIXED_CAMERA"
+        },
+        "Elevator-Camera3": {
+            "enable": false,
+            "ip": "10.10.182.33",
+            "username": "admin",
+            "password": "bydq123456",
+            "type": "FIXED_CAMERA"
+        },
+        "Elevator-Camera4": {
+            "enable": true,
+            "ip": "10.10.183.197",
+            "username": "admin",
+            "password": "bydq123456",
+            "type": "FIXED_CAMERA"
+        },
+        "Elevator-Camera5": {
+            "enable": false,
+            "ip": "10.10.182.35",
+            "username": "admin",
+            "password": "bydq123456",
+            "type": "FIXED_CAMERA"
+        },
+        "Elevator-Camera6": {
+            "enable": false,
+            "ip": "10.10.183.196",
+            "username": "admin",
+            "password": "bydq123456",
+            "type": "FIXED_CAMERA"
+        },
+        "Elevator-Camera7": {
+            "enable": false,
+            "ip": "10.10.182.37",
+            "username": "admin",
+            "password": "bydq123456",
+            "type": "FIXED_CAMERA"
+        },
+        "Elevator-Camera8": {
+            "enable": false,
+            "ip": "10.10.182.38",
+            "username": "admin",
+            "password": "bydq123456",
+            "type": "FIXED_CAMERA"
+        }
+    }
+}

@@ -32,9 +32,9 @@ int main(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
-    std::string className = "weigths/YoloV8l_water_20250717.txt";
-    std::string modelPath = "weigths/YoloV8l_water_20250717.onnx";
-    std::string imgPath = "data/water_seepage1.jpeg";
+    std::string className = "weigths/yolov8s_coco80_20250608.txt";
+    std::string modelPath = "weigths/yolov8s_coco80_20250608.onnx";
+    std::string imgPath = "data/bus.jpg";
     std::shared_ptr<CObjectDetect> objDetect = std::make_shared<CObjectDetect>(modelPath, className);
     objDetect->modelDetect(imgPath);
 
