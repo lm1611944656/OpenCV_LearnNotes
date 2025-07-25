@@ -87,11 +87,11 @@ void CYoloV8Pose::letterBox(const cv::Mat &image, cv::Mat &outImage,
 
 void CYoloV8Pose::scaleBoxes(cv::Rect &box)
 {
-	// 去掉填充偏移
+	/**去掉填充偏移 */
 	box.x -= static_cast<int>(params_[2]); // 左填充
 	box.y -= static_cast<int>(params_[3]); // 上填充
 
-	// 恢复到原始图像尺寸
+	/**恢复到原始图像尺寸 */
 	box.x = static_cast<int>(box.x / params_[0]);
 	box.y = static_cast<int>(box.y / params_[1]);
 	box.width = static_cast<int>(box.width / params_[0]);
@@ -121,7 +121,7 @@ void CYoloV8Pose::readImg(const std::string &srcImgPath)
 {
 	if (srcImgPath.empty())
 	{
-		throw std::invalid_argument("传递参数错误!");
+		throw std::invalid_argument("传递参数有误: srcImgPath图像路径传递为空!");
 	}
 	srcImg_ = cv::imread(srcImgPath, cv::WINDOW_AUTOSIZE);
 }
@@ -324,7 +324,7 @@ void CYoloV8Pose::drawPose(cv::Mat &img, const std::vector<TOutputPose_t> &keyPo
 				int kps_y = std::round(kps[k * 3 + 1]);
 				float kps_s = kps[k * 3 + 2];
 
-				//                printf("x:%d y:%d s:%f\n", kps_x, kps_y, kps_s);
+				// printf("x:%d y:%d s:%f\n", kps_x, kps_y, kps_s);
 
 				if (kps_s > 0.0f)
 				{
@@ -399,85 +399,149 @@ void CYoloV8Pose::drawPose(cv::Mat &img, const std::vector<TOutputPose_t> &keyPo
 	}
 }
 
-/**17个关键点的颜色 */
-const std::vector<std::vector<unsigned int>> KPS_COLORS =
-	{{0, 255, 0},		/**1号点的颜色 */
-	 {0, 255, 0},		/**2号点的颜色 */
-	 {0, 255, 0},		/**3号点的颜色 */
-	 {0, 255, 0},
-	 {0, 255, 0},
-	 {255, 128, 0},
-	 {255, 128, 0},
-	 {255, 128, 0},
-	 {255, 128, 0},
-	 {255, 128, 0},
-	 {255, 128, 0},
-	 {51, 153, 255},
-	 {51, 153, 255},
-	 {51, 153, 255},
-	 {51, 153, 255},
-	 {51, 153, 255},
-	 {51, 153, 255}};
-
-/**
- * 17个关键点的之间的连接规则
- * 小序号的点连接到大序号的点
- * 下面的连接规则是特殊的项目需求。
- * 参考链接：https://blog.csdn.net/FL1623863129/article/details/149387052
- */
-const std::vector<std::vector<unsigned int>> SKELETON = {{16, 14},		/**16号点连接到14号点 */
-														 {14, 12},		/**14号点连接到12号点 */
-														 {17, 15},		/**17号点连接到15号点 */
-														 {15, 13},
-														 {12, 13},
-														 {6, 12},
-														 {7, 13},
-														 {6, 7},
-														 {6, 8},
-														 {7, 9},
-														 {8, 10},
-														 {9, 11},
-														 {2, 3},
-														 {1, 2},
-														 {1, 3},
-														 {2, 4},
-														 {3, 5},
-														 {4, 6},
-														 {5, 7}};
-
-/**连接线段的颜色(对应连接规则) */
-const std::vector<std::vector<unsigned int>> LIMB_COLORS = {{51, 153, 255},
-															{51, 153, 255},
-															{51, 153, 255},
-															{51, 153, 255},
-															{255, 51, 255},
-															{255, 51, 255},
-															{255, 51, 255},
-															{255, 128, 0},
-															{255, 128, 0},
-															{255, 128, 0},
-															{255, 128, 0},
-															{255, 128, 0},
-															{0, 255, 0},
-															{0, 255, 0},
-															{0, 255, 0},
-															{0, 255, 0},
-															{0, 255, 0},
-															{0, 255, 0},
-															{0, 255, 0}};
-
-void CYoloV8Pose::modelDetect(const std::string &imgPath)
+void CYoloV8Pose::drawKeyPoints(cv::Mat &img, const std::vector<TOutputPose_t> &keyPointsDetectResult,
+								const std::vector<std::vector<unsigned int>> &skeleton,
+								const std::vector<std::vector<unsigned int>> &kps_colors,
+								const std::vector<std::vector<unsigned int>> &limb_colors)
 {
+	if (img.empty() || keyPointsDetectResult.empty() || skeleton.empty() || kps_colors.empty() || limb_colors.empty())
+	{
+		throw std::invalid_argument("传递的参数有误: 图像为空或没有检测到关键点!");
+	}
+
+	const int num_point = 17;
+	for (auto &result : keyPointsDetectResult)
+	{
+		cv::rectangle(img, result.box, cv::Scalar(255, 0, 0), 1, 8);
+
+		std::string label = "person:" + std::to_string(result.confidence);
+		int baseLine;
+		cv::Size labelSize = cv::getTextSize(label, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
+		int top = std::max(static_cast<int>(result.box.y), labelSize.height);
+		cv::putText(img, label, cv::Point(result.box.x, top), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 0, 0), 2);
+
+		/**绘制关键点 */
+		auto &kps = result.kps;
+		for (int k = 0; k < num_point; k++) // 遍历关键点
+		{
+			int kps_x = std::round(kps[k * 3]);
+			int kps_y = std::round(kps[k * 3 + 1]);
+			float kps_s = kps[k * 3 + 2];
+
+			if (kps_s > 0.0f)
+			{
+				cv::Scalar kps_color = cv::Scalar(kps_colors[k][0], kps_colors[k][1], kps_colors[k][2]);
+				cv::circle(img, {kps_x, kps_y}, 5, kps_color, -1);
+			}
+		}
+
+		/**处理骨架连线 */
+		for (const auto &ske : skeleton) // 遍历骨架定义
+		{
+			int pos1_x = std::round(kps[(ske[0] - 1) * 3]);
+			int pos1_y = std::round(kps[(ske[0] - 1) * 3 + 1]);
+			float pos1_s = kps[(ske[0] - 1) * 3 + 2];
+
+			int pos2_x = std::round(kps[(ske[1] - 1) * 3]);
+			int pos2_y = std::round(kps[(ske[1] - 1) * 3 + 1]);
+			float pos2_s = kps[(ske[1] - 1) * 3 + 2];
+
+			if (pos1_s > 0.0f && pos2_s > 0.0f)
+			{
+				cv::Scalar limb_color = cv::Scalar(limb_colors[ske[0]][0], limb_colors[ske[0]][1], limb_colors[ske[0]][2]);
+				cv::line(img, {pos1_x, pos1_y}, {pos2_x, pos2_y}, limb_color);
+			}
+		}
+	}
+}
+
+void CYoloV8Pose::fallDetectTask(cv::Mat &img, const std::vector<TOutputPose_t> &keyPointsDetectResult)
+{
+	if (img.empty() || keyPointsDetectResult.empty())
+	{
+		throw std::invalid_argument("传递的参数有误: 图像为空或没有检测到关键点!");
+	}
+
+	for (const auto &result : keyPointsDetectResult)
+	{
+		auto &kps = result.kps;
+
+		// 计算关键点位置
+		float pt5_x = kps[5 * 3];
+		float pt5_y = kps[5 * 3 + 1];
+		float pt6_x = kps[6 * 3];
+		float pt6_y = kps[6 * 3 + 1];
+		float center_up_x = (pt5_x + pt6_x) / 2.0f;
+		float center_up_y = (pt5_y + pt6_y) / 2.0f;
+		cv::Point center_up = cv::Point((int)center_up_x, (int)center_up_y);
+
+		float pt11_x = kps[11 * 3];
+		float pt11_y = kps[11 * 3 + 1];
+		float pt12_x = kps[12 * 3];
+		float pt12_y = kps[12 * 3 + 1];
+		float center_down_x = (pt11_x + pt12_x) / 2.0f;
+		float center_down_y = (pt11_y + pt12_y) / 2.0f;
+		cv::Point center_down = cv::Point((int)center_down_x, (int)center_down_y);
+
+		float right_angle_point_x = center_down_x;
+		float right_angle_point_y = center_up_y;
+		cv::Point right_angl_point = cv::Point((int)right_angle_point_x, (int)right_angle_point_y);
+
+		float a = abs(right_angle_point_x - center_up_x);
+		float b = abs(center_down_y - right_angle_point_y);
+
+		float tan_value = a / b;
+		float Pi = acos(-1);
+		float angle = atan(tan_value) * 180.0f / Pi;
+		std::string angel_label = "angle: " + std::to_string(angle);
+		putText(img, angel_label, cv::Point(result.box.x, result.box.y - 40), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255), 2);
+
+		if (angle > 60.0f || center_down_y <= center_up_y || (double)result.box.width / result.box.height > 5.0f / 3.0f)
+		{
+			std::string fall_down_label = "person fall down!!!!";
+			putText(img, fall_down_label, cv::Point(result.box.x, result.box.y - 20), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255), 2);
+
+			printf("angel:%f width/height:%f\n", angle, (double)result.box.width / result.box.height);
+		}
+
+		// 绘制相关线条
+		cv::line(img, center_up, center_down, cv::Scalar(0, 0, 255), 2, 8);
+		cv::line(img, center_up, right_angl_point, cv::Scalar(0, 0, 255), 2, 8);
+		cv::line(img, right_angl_point, center_down, cv::Scalar(0, 0, 255), 2, 8);
+	}
+}
+
+void CYoloV8Pose::modelDetect(const std::string &imgPath,
+							  const std::vector<std::vector<unsigned int>> &skeleton,
+							  const std::vector<std::vector<unsigned int>> &kps_colors,
+							  const std::vector<std::vector<unsigned int>> &limb_colors)
+{
+	/**读取类别标签 */
 	readClassLabel();
+
+	/**读取图像 */
 	readImg(imgPath);
+
+	/**图像预处理 */
 	cv::Mat blob = preprocess();
+
+	/**模型推理 */
 	std::vector<cv::Mat> netOut = modelInference(blob, CPU);
+
+	/**后处理 */
 	std::vector<TOutputPose_t> keyPointsDetectResult = postprocess(netOut);
 	std::cout << "keyPointsDetectResult 的数量：" << keyPointsDetectResult.size() << std::endl;
-
 	std::cout << keyPointsDetectResult[0].kps.size() << std::endl; // 51
 
-	drawPose(srcImg_, keyPointsDetectResult, SKELETON, KPS_COLORS, LIMB_COLORS);
+	/**绘制关键点，关键点连线以及摔倒检测 */
+	// drawPose(srcImg_, keyPointsDetectResult, skeleton, kps_colors, limb_colors);
+
+	/**绘制关键点, 以及关键点之间的连线 */
+	drawKeyPoints(srcImg_, keyPointsDetectResult, skeleton, kps_colors, limb_colors);
+
+	/**摔倒检测任务 */
+	fallDetectTask(srcImg_, keyPointsDetectResult);
+
 	cv::imshow("Detected Keypoints", srcImg_);
 }
 
