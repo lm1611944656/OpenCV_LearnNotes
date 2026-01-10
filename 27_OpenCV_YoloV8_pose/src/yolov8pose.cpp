@@ -273,7 +273,7 @@ std::vector<TOutputPose_t> CYoloV8Pose::postprocess(std::vector<cv::Mat> &netOut
 		/**绘制结果 */
 		/**类别标签 "person"*/
 		std::string label = "person:" + cv::format("%.2f", confidences[idx]);
-		// drawResult(this->srcImg_, label, outPoseResult.box);
+		//drawResult(this->srcImg_, label, outPoseResult.box);
 	}
 
 	return keyPointsDetectResult;
@@ -284,6 +284,9 @@ void CYoloV8Pose::drawResult(cv::Mat &srcImg, std::string label, cv::Rect box)
 	cv::rectangle(srcImg, box, cv::Scalar(255, 0, 0), 1);
 	cv::putText(srcImg, label, cv::Point(box.x, box.y), cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(0, 255, 255), 1);
 	cv::imshow("srcImg", srcImg);
+
+	// 保存到本地
+    //cv::imwrite("./data/result/result.jpg", srcImg);
 }
 
 void CYoloV8Pose::drawPose(cv::Mat &img, const std::vector<TOutputPose_t> &keyPointsDetectResult,
@@ -300,7 +303,7 @@ void CYoloV8Pose::drawPose(cv::Mat &img, const std::vector<TOutputPose_t> &keyPo
 		width = result.box.width;
 		height = result.box.height;
 
-		//        printf("x: %d  y:%d  w:%d  h%d\n",(int)left, (int)top, (int)result.box.width, (int)result.box.height);
+		printf("x: %d  y:%d  w:%d  h%d\n",(int)left, (int)top, (int)result.box.width, (int)result.box.height);
 
 		// 框出目标
 		cv::rectangle(img, result.box, cv::Scalar(255, 0, 0), 1, 8);
@@ -543,6 +546,9 @@ void CYoloV8Pose::modelDetect(const std::string &imgPath,
 	fallDetectTask(srcImg_, keyPointsDetectResult);
 
 	cv::imshow("Detected Keypoints", srcImg_);
+
+	// 保存到本地
+    cv::imwrite("./data/result/result.jpg", srcImg_);
 }
 
 /*************************************************************************

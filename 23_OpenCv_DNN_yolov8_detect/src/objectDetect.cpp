@@ -315,6 +315,14 @@ void CObjectDetect::modelDetect(const std::string &imgPath)
 	cv::Mat blob = preprocess();
 	std::vector<cv::Mat> netOut = modelInference(blob, CPU);
 	std::vector<TDetectResult_t> detectResult = postprocess(netOut);
+	if(detectResult.size() == 0){
+		std::cout << "detect result null" << std::endl;
+	}else{
+		std::cout << "detect result size:" << detectResult.size() << std::endl;
+		for(int i = 0; i < detectResult.size(); i++){
+			std::cout << "obj name: " << detectResult[i].className << std::endl;
+		}
+	}
 }
 
 /*************************************************************************

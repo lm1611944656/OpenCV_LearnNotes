@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 {
     std::string modelPath = "weigths/yolov8l-pose.onnx";
     std::string classNamePath = "weigths/yolov8l-pose.txt";
-    std::string srcImgPath = "data/bus.jpg";
+    std::string srcImgPath = "data/test3.jpg";
 
     std::shared_ptr<CYoloV8Pose> obj = std::make_shared<CYoloV8Pose>(modelPath, classNamePath);
     obj->modelDetect(srcImgPath, SKELETON, KPS_COLORS, LIMB_COLORS);
