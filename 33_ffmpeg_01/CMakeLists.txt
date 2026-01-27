@@ -1,0 +1,100 @@
+# 1. 指定cmake的最低版本要求
+cmake_minimum_required(VERSION 3.20)
+
+# 2. 指定项目名称，项目版本，项目描述，项目使用的语言
+project(application
+        VERSION 1.1.1
+        DESCRIPTION "YoloV8关键点检测"
+        LANGUAGES CXX)   
+
+message("当前系统名称：${CMAKE_SYSTEM_NAME}")    # 获取系统名称
+message("是否是WIN32: ${WIN32}")                # 判断是否是windows
+message("是否是UNIX: ${UNIX}")                 # 判断是否是UNIX
+
+# 方式1，通过cmake文件添加编译参数
+add_compile_options(-Wall -std=c++14)
+# add_compile_options(-O2)
+
+# 设置编译类型
+set(CMAKE_BUILD_TYPE Debug)
+
+# 设置调试标志
+# -DCMAKE_CXX_FLAGS="-g" \
+# -DCMAKE_C_FLAGS="-g" \
+set(CMAKE_CXX_FLAGS "-g")
+set(CMAKE_C_FLAGS "-g")
+
+# 设置 libcurl 的根目录
+set(CURL_ROOT "/usr/local/curl8_14_1")
+
+# 设置 libevent 根目录
+set(LIBEVENT_ROOT "/usr/local/libevent2_1_12")
+
+# 查找 OpenCV
+find_package(OpenCV 4.10 REQUIRED)
+message(STATUS "Found OpenCV version: ${OpenCV_VERSION}")
+message(STATUS "OpenCV libraries to link: ${OpenCV_LIBS}")
+message(STATUS "OpenCV include directories: ${OpenCV_INCLUDE_DIRS}")
+
+# 查找 libcurl
+find_package(CURL REQUIRED)
+message(STATUS "Found CURL version: ${CURL_VERSION_STRING}")
+message(STATUS "CURL include directories: ${CURL_INCLUDE_DIRS}")
+message(STATUS "CURL libraries to link: ${CURL_LIBRARIES}")
+
+# =============== 查找 FFmpeg 组件 ===============
+find_package(PkgConfig REQUIRED)
+
+# 按需查找组件（你用到了 avdevice，所以必须包含它）
+# pkg_check_modules(AVDEVICE REQUIRED  libavdevice)
+pkg_check_modules(AVFORMAT REQUIRED  libavformat)
+pkg_check_modules(AVCODEC  REQUIRED  libavcodec)
+pkg_check_modules(AVUTIL    REQUIRED  libavutil)
+pkg_check_modules(SWSCALE   REQUIRED  libswscale)
+
+# 去指定的目录下执行cmake文件
+# add_subdirectory(${PROJECT_SOURCE_DIR}/src)
+# add_subdirectory(${PROJECT_SOURCE_DIR}/src_back)
+
+# 生成可执行文件
+add_executable(${PROJECT_NAME} 
+    main.cpp
+    #${NEW_SRC_LIST}
+    # ${NEW_SRC_back_LIST}
+)
+
+# 添加头文件搜索路径
+target_include_directories(${PROJECT_NAME} PUBLIC
+    ${CURL_INCLUDE_DIRS}
+    # ${PROJECT_SOURCE_DIR}/src_back
+    # ${PROJECT_SOURCE_DIR}/src
+    #${PROJECT_SOURCE_DIR}/src/ctimer
+    #${LIBEVENT_ROOT}/include
+    # ${AVDEVICE_INCLUDE_DIRS}
+    ${AVFORMAT_INCLUDE_DIRS}
+    ${AVCODEC_INCLUDE_DIRS}
+    ${AVUTIL_INCLUDE_DIRS}
+    ${SWSCALE_INCLUDE_DIRS}
+)
+
+# 添加库文件搜索路径
+# target_link_directories(${PROJECT_NAME} PUBLIC
+#     ${LIBEVENT_ROOT}/lib
+# )
+
+# 为目标添加库
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    pthread                 # 使用多线程需要包含这个库
+    ${OpenCV_LIBS}
+    # ${CURL_LIBRARIES}
+    # event
+    # event_core
+    # event_extra
+
+    # FFmpeg 组件（通过 pkg-config 导入的目标）
+    #${AVDEVICE_LIBRARIES}
+    ${AVFORMAT_LIBRARIES}
+    ${AVCODEC_LIBRARIES}
+    ${AVUTIL_LIBRARIES}
+    ${SWSCALE_LIBRARIES}
+)

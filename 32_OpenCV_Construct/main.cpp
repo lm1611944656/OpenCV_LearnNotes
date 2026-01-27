@@ -17,7 +17,7 @@
 
 
 #if 0
-// 测试示例
+/** 测试示例，用自定义的MockCamera摄像头，模拟相机。验证推理框架 */
 int main() {
 	try {
 		// 1. 创建相机管理器
@@ -91,7 +91,7 @@ int main() {
 #endif
 
 #if 0
-// http://10.10.182.45/doc/page/preview.asp
+/** 测试示例，将真实摄像头的视频流获取并且保存到本地 */
 int main() {
     try {
         // 1. 创建相机管理器
@@ -187,6 +187,7 @@ int main() {
 #endif
 
 #if 0
+/** 测试示例，将真实摄像头的视频流进行视频帧处理，处理之后再显示 */
 int main() {
     try {
         // 1. 创建相机管理器
@@ -268,6 +269,8 @@ int main() {
 }
 #endif
 
+#if 0
+/** 测试示例，系统日志框架验证*/
 #include "logger.h"
 #include <stdio.h>
 
@@ -286,3 +289,95 @@ int main(void) {
     printf("\n Check 'app.log' for full output.\n");
     return 0;
 }
+#endif
+
+#if 1
+/** 测试示例，框架中加入了帧率统计、队列积压告警、丢帧计数*/
+int main() {
+    try {
+        // 1. 创建相机管理器
+        CameraManager manager;
+
+        // 2. 添加你的三个 RTSP 摄像头
+        manager.addCamera(std::make_unique<IPCamera>("GY-Camera1", "10.10.12.228", "admin", "bpg123456"));
+        manager.addCamera(std::make_unique<IPCamera>("GY-Camera2", "10.10.12.224", "admin", "bpg12345"));
+        manager.addCamera(std::make_unique<IPCamera>("GY-Camera3", "10.10.182.45", "admin", "bydq123456"));
+
+        // 3. 初始化所有相机
+        if (!manager.initAllCameras()) {
+            std::cerr << "[ERROR] Camera initialization failed!" << std::endl;
+            return -1;
+        }
+
+        // 4. 启动所有采集线程
+        if (!manager.startAllCapture()) {
+            std::cerr << "[ERROR] Failed to start capture!" << std::endl;
+            return -1;
+        }
+
+        std::cout << "\n[INFO] Displaying live streams with ID and timestamp. Press 'q' to quit.\n";
+
+        // 5. 主循环：获取帧 → 叠加文字 → 显示
+        auto last_metric_time = std::chrono::steady_clock::now();
+        while (true) {
+            auto all_frames = manager.getAllFrames();
+
+            for (auto& [cam_id, frame_data] : all_frames) {
+                if (frame_data.frame.empty()) {
+                    // 可选：显示黑屏提示
+                    cv::Mat black(480, 640, CV_8UC3, cv::Scalar(0, 0, 0));
+                    cv::putText(black, cam_id + ": No Signal", cv::Point(10, 240),
+                                cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 0, 255), 2);
+                    //cv::imshow("Live: " + cam_id, black);
+                    continue;
+                }
+
+                cv::Mat frame = frame_data.frame.clone();
+
+                // 获取当前时间字符串
+                // auto now = std::chrono::system_clock::now();
+                // auto time_t = std::chrono::system_clock::to_time_t(now);
+                // std::string timestamp = std::ctime(&time_t);
+                // if (!timestamp.empty() && timestamp.back() == '\n') {
+                //     timestamp.pop_back(); // 移除末尾换行符
+                // }
+
+                // 在帧上绘制摄像头 ID 和时间戳
+                // cv::putText(frame, cam_id, cv::Point(10, 30),
+                //             cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 255, 0), 2);
+                // cv::putText(frame, timestamp, cv::Point(10, 60),
+                //             cv::FONT_HERSHEY_SIMPLEX, 0.7, cv::Scalar(255, 255, 255), 2);
+
+                // 显示
+                cv::imshow("Live: " + cam_id, frame);
+            }
+
+            // 每2秒打印性能
+            auto now = std::chrono::steady_clock::now();
+            if (std::chrono::duration<double>(now - last_metric_time).count() >= 2.0) {
+                manager.printAllMetrics(); 
+                last_metric_time = now;
+            }
+
+            // 按 'q' 或 ESC 退出
+            int key = cv::waitKey(1) & 0xFF;
+            if (key == 'q' || key == 27) {
+                break;
+            }
+        }
+
+        // 6. 清理
+        manager.stopAllCapture();
+        manager.closeAllCameras();
+        cv::destroyAllWindows();
+
+        std::cout << "\n[INFO] Application exited.\n";
+    }
+    catch (const std::exception& e) {
+        std::cerr << "[FATAL] " << e.what() << std::endl;
+        return -1;
+    }
+
+    return 0;
+}
+#endif
