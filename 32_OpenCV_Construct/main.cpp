@@ -98,8 +98,8 @@ int main() {
         CameraManager manager;
 
         // 2. 添加你的三个 RTSP 摄像头
-        //manager.addCamera(std::make_unique<IPCamera>("GY-Camera1", "10.10.12.228", "admin", "bpg123456"));
-        //manager.addCamera(std::make_unique<IPCamera>("GY-Camera2", "10.10.12.224", "admin", "bpg12345"));
+        manager.addCamera(std::make_unique<IPCamera>("GY-Camera1", "10.10.12.228", "admin", "bpg123456"));
+        manager.addCamera(std::make_unique<IPCamera>("GY-Camera2", "10.10.12.224", "admin", "bpg12345"));
         manager.addCamera(std::make_unique<IPCamera>("GY-Camera3", "10.10.182.45", "admin", "bydq123456"));
 
         // 3. 初始化所有相机
